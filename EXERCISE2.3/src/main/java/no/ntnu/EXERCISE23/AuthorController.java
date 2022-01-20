@@ -45,7 +45,7 @@ public class AuthorController {
      * @param id Id of the author to be returned
      * @return author with the given id or status 404
      */
-    @GetMapping(value = "authors/{authorId")
+    @GetMapping(value = "authors/{authorId}")
     public ResponseEntity<Author> getOne(@PathVariable int id) {
         ResponseEntity<Author> response;
         Author author = findAuthorById(id);

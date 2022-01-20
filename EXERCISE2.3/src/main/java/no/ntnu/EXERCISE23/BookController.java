@@ -4,8 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * REST API controller for book collection
@@ -24,10 +27,11 @@ public class BookController {
      */
     private ArrayList<Book> initializeData() {
         ArrayList<Book> books = new ArrayList<Book>();
-        books.add(new Book(1,"book1",1999,400));
-        books.add(new Book(2,"book2",2021,167));
-        books.add(new Book(3,"book3",2000,300));
-        books.add(new Book(4,"book4",2005,500));
+        // might not work immutable list then new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
+        books.add(new Book(1,"book1",1999,400, Arrays.asList(1,2)));
+        books.add(new Book(2,"book2",2021,167, List.of(1)));
+        books.add(new Book(3,"book3",2000,300, List.of(2)));
+        books.add(new Book(4,"book4",2005,500, Arrays.asList(1,2,3)));
         return books;
     }
 
@@ -56,6 +60,24 @@ public class BookController {
     @GetMapping(value = "books")
     public @ResponseBody ArrayList<Book> getAll() {
         return this.books;
+    }
+
+    @GetMapping(value ="books/authorId/{authorId}" ) // what to do here task 2.4.5
+    public @ResponseBody ResponseEntity<List<Book>> getAll(@RequestParam Integer authorId) {
+        ResponseEntity<List<Book>> response = null;
+        List<Book> booksFound = new ArrayList<>() {
+        };
+        if (authorId > 0) {
+           response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            for (Book b : this.books) {
+                if (b.hasAuthor(authorId)) {
+                    booksFound.add(b);
+                }
+                response = new ResponseEntity<>(booksFound, HttpStatus.OK);
+            }
+        }
+        return response;
     }
 
     /**
@@ -124,6 +146,7 @@ public class BookController {
 
         return response;
     }
+
 
 
     /**

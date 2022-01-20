@@ -1,16 +1,20 @@
 package no.ntnu.EXERCISE23;
 
+import java.util.List;
+
 public class Book {
     private int id;
     private String title;
     private int year;
     private int numberOfPages;
+    private List<Integer> authors;
 
-    public Book(int id, String title, int year, int numberOfPages) {
+    public Book(int id, String title, int year, int numberOfPages, List<Integer> authors) {
         this.id = id;
         this.title = title;
         this.year = year;
         this.numberOfPages = numberOfPages;
+        this.authors = authors;
     }
 
     /**
@@ -52,4 +56,29 @@ public class Book {
     public int getNumberOfPages() {
         return numberOfPages;
     }
+
+    /**
+     * Gets a list of all the authors
+     * @return all the author IDs to this book as a list
+     */
+    public List<Integer> getAuthors() {
+        return this.authors;
+    }
+
+    /**
+     * Checks if this book has an author with specified id
+     * @param authorToBeFound the id of the author to be found
+     * @return ture if found or false if not
+     */
+    public boolean hasAuthor(int authorToBeFound) {
+        return this.authors.contains(authorToBeFound);
+    }
+
+    public void addAuthor(int authorId) {
+        if (!this.authors.contains(authorId) || authorId > 0) {
+            this.authors.add(authorId);
+        }
+    }
+
+
 }
