@@ -1,37 +1,41 @@
-package no.ntnu.EXERCISE23;
+package no.ntnu.crudrest;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * REST API controller for book collection
  */
 @RestController
+@RequestMapping("/books")
 public class BookController {
-    private ArrayList<Book> books;
+    private List<Book> books;
 
     public BookController() {
-        this.books = initializeData();
+        initializeData();
     }
 
     /**
      * Initialize dummy book data for the collection
-     * @return List with books
      */
-    private ArrayList<Book> initializeData() {
-        ArrayList<Book> books = new ArrayList<Book>();
-        // might not work immutable list then new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
-        books.add(new Book(1,"book1",1999,400, Arrays.asList(1,2)));
-        books.add(new Book(2,"book2",2021,167, List.of(1)));
-        books.add(new Book(3,"book3",2000,300, List.of(2)));
-        books.add(new Book(4,"book4",2005,500, Arrays.asList(1,2,3)));
+    private void initializeData() {
+        books = new LinkedList<>();
+        books.add(new Book(1, "Computer Networks", 2016, 800));
+        books.add(new Book(2, "12 Rules for Life", 2019, 600));
+    }
+
+    /**
+     * Get All books
+     * HTTP GET to /books
+     * @return List of all books currently stored in the collection
+     */
+    @GetMapping
+    public List<Book> getAll() {
         return books;
     }
 
@@ -40,8 +44,8 @@ public class BookController {
      * @param id Id of the book to be returned
      * @return Book with the given ID or status 404
      */
-    @GetMapping(value = "books/{bookId}")
-    public ResponseEntity<Book> getOne(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> getOne(@PathVariable Integer id) {
         ResponseEntity<Book> response;
         Book book = findBookById(id);
         if (book != null) {
@@ -53,45 +57,17 @@ public class BookController {
     }
 
     /**
-     * Get All books
-     * HTTP GET to /books
-     * @return List of all books currently stored in the collection
-     */
-    @GetMapping(value = "books")
-    public @ResponseBody ArrayList<Book> getAll() {
-        return this.books;
-    }
-
-    @GetMapping(value ="books/authorId/{authorId}" ) // what to do here task 2.4.5
-    public @ResponseBody ResponseEntity<List<Book>> getAll(@RequestParam Integer authorId) {
-        ResponseEntity<List<Book>> response = null;
-        List<Book> booksFound = new ArrayList<>() {
-        };
-        if (authorId > 0) {
-           response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            for (Book b : this.books) {
-                if (b.hasAuthor(authorId)) {
-                    booksFound.add(b);
-                }
-                response = new ResponseEntity<>(booksFound, HttpStatus.OK);
-            }
-        }
-        return response;
-    }
-
-    /**
      * Add a book to the collection
      * @param book Book to be added, from HTTP response body
      * @return 200 OK status on success, 400 Bad request on error
      */
-    @PostMapping(value = "books")
-    public @ResponseBody ResponseEntity<String> addBook(Book book) {
+    @PostMapping
+    public ResponseEntity<String> add(@RequestBody Book book) {
         ResponseEntity<String> response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (book != null && book.isValid()) {
             Book existingBook = findBookById(book.getId());
             if (existingBook == null) {
-                this.books.add(book);
+                books.add(book);
                 response = new ResponseEntity<>(HttpStatus.OK);
             }
         }
@@ -103,12 +79,12 @@ public class BookController {
      * @param id ID of the book to delete
      * @return 200 OK on success, 404 Not found on error
      */
-    @DeleteMapping("books/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) {
         ResponseEntity<String> response;
         Book book = findBookById(id);
         if (book != null) {
-            this.books.remove(book);
+            books.remove(book);
             response = new ResponseEntity<>(HttpStatus.OK);
         } else {
             response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -122,7 +98,7 @@ public class BookController {
      * @param book New book data to store, from request body
      * @return 200 OK on success, 400 Bad request on error
      */
-    @PutMapping("books/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable int id, @RequestBody Book book) {
         String errorMessage = null;
         Book existingBook = findBookById(id);
@@ -137,8 +113,8 @@ public class BookController {
 
         ResponseEntity<String> response;
         if (errorMessage == null) {
-            this.books.remove(existingBook);
-            this.books.add(book);
+            books.remove(existingBook);
+            books.add(book);
             response = new ResponseEntity<>(HttpStatus.OK);
         } else {
             response = new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
@@ -147,8 +123,6 @@ public class BookController {
         return response;
     }
 
-
-
     /**
      * Search through the book collection, find the book by given ID
      * @param id Book ID
@@ -156,7 +130,7 @@ public class BookController {
      */
     private Book findBookById(Integer id) {
         Book book = null;
-        Iterator<Book> it = this.books.iterator();
+        Iterator<Book> it = books.iterator();
         while (it.hasNext() && book == null) {
             Book b = it.next();
             if (b.getId() == id) {
@@ -165,6 +139,4 @@ public class BookController {
         }
         return book;
     }
-
-
 }
