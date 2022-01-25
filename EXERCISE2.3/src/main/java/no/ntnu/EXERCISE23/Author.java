@@ -9,15 +9,15 @@ public class Author {
     private String lastName;
     private int birthYear;
 
-    public int getId() {
-        return id;
-    }
-
     public Author(int id, String firstName, String lastName, int birthYear) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthYear = birthYear;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public boolean isValid() {
