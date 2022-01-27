@@ -1,17 +1,13 @@
-package no.ntnu.EXERCISE23;
+package no.ntnu.crudrest;
 
-import java.util.Objects;
-
+/**
+ * Represents a resource: an author. We store Author objects in the application state.
+ */
 public class Author {
-
     private int id;
     private String firstName;
     private String lastName;
     private int birthYear;
-
-    public int getId() {
-        return id;
-    }
 
     public Author(int id, String firstName, String lastName, int birthYear) {
         this.id = id;
@@ -20,8 +16,8 @@ public class Author {
         this.birthYear = birthYear;
     }
 
-    public boolean isValid() {
-        return id > 0 && !firstName.equals("") && !lastName.equals("");
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) {
@@ -50,5 +46,13 @@ public class Author {
 
     public void setBirthYear(int birthYear) {
         this.birthYear = birthYear;
+    }
+
+    /**
+     * Checks if the object is a valid author
+     * @return True if it is valid, false otherwise
+     */
+    public boolean isValid() {
+        return id > 0 && firstName != null && lastName != null && birthYear > 0;
     }
 }

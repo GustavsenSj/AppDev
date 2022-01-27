@@ -1,10 +1,10 @@
-package no.ntnu.hello;
+package no.ntnu.crudrest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class HelloApplicationTests {
+class BuggyBookAppTests {
 
 	@Test
 	void contextLoads() {

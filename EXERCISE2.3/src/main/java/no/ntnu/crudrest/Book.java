@@ -1,5 +1,8 @@
-package no.ntnu.EXERCISE23;
+package no.ntnu.crudrest;
 
+/**
+ * Represents a resource: a book. We store Book objects in the application state.
+ */
 public class Book {
     private int id;
     private String title;
@@ -21,35 +24,43 @@ public class Book {
         return id > 0 && title != null && !title.equals("");
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public void setNumberOfPages(int numberOfPages) {
-        this.numberOfPages = numberOfPages;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Returns the year of publication for the book
+     * @return Publication year
+     */
     public int getYear() {
         return year;
     }
 
+    /**
+     * Set the year of publication for the book
+     * @param year Year of publication
+     */
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public int getNumberOfPages() {
         return numberOfPages;
+    }
+
+    public void setNumberOfPages(int numberOfPages) {
+        this.numberOfPages = numberOfPages;
     }
 }

@@ -1,13 +1,13 @@
-package no.ntnu.EXERCISE23;
+package no.ntnu.crudrest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class CrudrestApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(CrudrestApplication.class, args);
 	}
 
 }

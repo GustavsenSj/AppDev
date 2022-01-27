@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>no.ntnu</groupId>
-	<artifactId>hello</artifactId>
+	<artifactId>buggy-books</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hello</name>
-	<description>Demo project for Spring Boot</description>
+	<name>buggy-books</name>
+	<description>Exercise 3.3 - Buggy Book API</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
