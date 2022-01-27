@@ -27,8 +27,7 @@ public class BookController {
      */
     @GetMapping("books")
     public List<Book> getAll() {
-        // TODO - Will finish it tomorrow, need to sleep now ;)))
-        return null;
+        return this.books;
     }
 
     /**
@@ -37,27 +36,28 @@ public class BookController {
      * @param id ID of the book to be returned
      * @return Book with the given ID or status 404
      */
+    @GetMapping("books/{id}")
     public ResponseEntity<Book> getOne(@PathVariable Integer id) {
         ResponseEntity<Book> response;
         Book book = findBookById(id);
         if (book != null) {
-            response = new ResponseEntity<>(book, HttpStatus.NOT_FOUND);
+            response = new ResponseEntity<>(book, HttpStatus.OK);
         } else {
-            response = new ResponseEntity<>(HttpStatus.OK);
+            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return response;
     }
 
     /**
      * Add a book to the collection
-     *
+     *ß
      * @param book Book to be added, from HTTP response body
      * @return 200 OK status on success, 400 Bad request on error
      */
-    @PostMapping("ooks")
+    @PostMapping("books")
     public ResponseEntity<String> add(@RequestBody Book book) {
         ResponseEntity<String> response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (book != null && !book.isValid()) {
+        if (book != null && book.isValid()) {
             Book existingBook = findBookById(book.getId());
             if (existingBook == null) {
                 books.add(book);
@@ -73,7 +73,7 @@ public class BookController {
      * @param id ID of the book to delete
      * @return 200 OK on success, 404 Not found on error
      */
-    @PostMapping("/books/{id}")
+    @DeleteMapping("/books/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) {
         ResponseEntity<String> response;
         Book book = findBookById(id);
@@ -127,10 +127,10 @@ public class BookController {
     private Book findBookById(Integer id) {
         Book book = null;
         Iterator<Book> it = books.iterator();
-        while (it.hasNext() && book == null) {
+        while (it.hasNext()) {
             Book b = it.next();
             if (b.getId() == id) {
-                b = book;
+                book = b;
             }
         }
         return book;
@@ -143,7 +143,7 @@ public class BookController {
         books = new LinkedList<>();
         books.add(new Book(1, "Computer Networks", 2016, 800));
         books.add(new Book(2, "12 Rules for Life", 2019, 600));
-        books.add(new Book(3, "The Clean Coder", 2011, 256));
+       // books.add(new Book(3, "The Clean Coder", 2011, 256));
     }
 
 }
